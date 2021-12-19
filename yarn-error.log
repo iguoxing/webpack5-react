@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.10/libexec/bin/yarn.js add recoil
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.10/libexec/bin/yarn.js install
 
 PATH: 
   /Users/zhaoguoxing/.pyenv/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Applications/VMware Fusion.app/Contents/Public:/Library/Apple/usr/bin:/Users/zhaoguoxing/opt/anaconda3/bin:/Users/zhaoguoxing/opt/anaconda3/condabin:/Users/zhaoguoxing/.pyenv/bin
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: EACCES: permission denied, unlink '/Users/zhaoguoxing/Documents/雪狼班/No.1第一周11.13-14/react_webpack5/webpack5-react/node_modules/@babel/core/node_modules/semver/CHANGELOG.md'
+  Error: EACCES: permission denied, unlink '/Users/zhaoguoxing/Documents/GitHub/webpack5-react/node_modules/@babel/core/node_modules/semver/README.md'
 
 npm manifest: 
   {
