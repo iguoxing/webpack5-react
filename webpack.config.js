@@ -7,28 +7,64 @@
  * @FilePath: /react_webpack5/webpack5-react/webpack.config.js
  */
 // Copyright 2021 zhaoguoxing
-// 
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-// 
-//     http://www.apache.org/licenses/LICENSE-2.0
-// 
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin')//html打包
 const {CleanWebpackPlugin} = require('clean-webpack-plugin')//打包前清除dist
 const friendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');//命令行友好提示
+const BundleAnalyzerPlugin =require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 //HRM 自动刷新 live relaoding
 module.exports = {
   mode: 'development',
   devtool: 'inline-source-map',//报错的时候更好的追踪代码和给出错误代码出现的地方的提示
   entry: {
-    app: './src/index.tsx'
+    app: './src/index.tsx'//为什么要弄多个entry？
+  },
+  optimization:{
+    runtimeChunk: {
+      name: 'runtime',
+    },
+    splitChunks:{
+      chunks: 'all',//分片
+      minChunks: 1,
+      cacheGroups: {
+        vendors: {
+          chunks: 'initial',
+          enforce: true,
+          // name: "chunk-vendors",
+          test: /[\\/]node_modules[\\/]/,
+          name(module, chunks, cacheGroupKey) {
+            // console.log('参与');
+            const moduleFileName = module
+              .identifier()
+              .split('/')
+              .reduceRight((item) => item);
+            const allChunksNames = chunks.map((item) => item.name).join('~');
+            return `ardenzhao-${cacheGroupKey}-${allChunksNames}-${moduleFileName}`;
+          },
+          priority: -10,
+          // reuseExistingChunk: true,
+        },
+        commons: {
+          chunks: 'all',
+          name: 'commons',
+          priority: -20,
+          //忽略 minSize，minChunks，maxAsyncRequests和maxInitialRequests外面选项
+          // enforce: true,
+          reuseExistingChunk: true,
+        },
+      },
+      //只有超过了这个字节的才会打包
+      // 要不要打这个总包出来
+      minSize: {
+        javascript: 0,
+        style: 0,
+      },
+      // //经验值 拆掉abc ->总包
+      maxSize: {
+        javascript: 110000,
+        style: 110000,
+      },
+    }
   },
   output: {
     path: path.resolve(__dirname, './dist'),
@@ -42,6 +78,7 @@ module.exports = {
     }),
     new CleanWebpackPlugin(),
     new friendlyErrorsWebpackPlugin(),
+    new BundleAnalyzerPlugin(),//分析
   ],
   module: {
     rules: [
